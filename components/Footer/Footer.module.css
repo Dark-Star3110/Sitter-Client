@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  color: white;
+  padding: 20px;
+}
+.footer-contact {
+  display: flex;
+  align-items: center;
+  width: 55%;
+}
+.footer-contact > a {
+  text-align: center;
+  font-size: 20px;
+  margin: 20px;
+  padding: 10px;
+  padding-right: 40px;
+  text-decoration: none;
+  color: white;
+}
+.footer-information {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+.tagName {
+  width: 200px;
+}

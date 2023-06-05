@@ -1,0 +1,64 @@
+.Main-website {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 20px;
+}
+.Background-main {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 70vh;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+
+.custom-button1 {
+  width: 200px;
+  height: 50px;
+  border-style: solid;
+  text-align: center;
+  padding: 10px;
+  color: #808080;
+}
+.custom-button2 {
+  width: 200px;
+  height: 50px;
+  border-style: solid;
+  text-align: center;
+  padding: 10px;
+  color: #808080;
+  margin-right: 60px;
+}
+.website-introduction {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 50px;
+}
+.introduction {
+  border-style: solid;
+  width: 220px;
+  height: 300px;
+  margin-left: 80px;
+  margin-right: 50px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.introduction > img {
+  width: 80px;
+  height: 80px;
+  padding: 10px;
+}
+.introduction > p {
+  flex: 1;
+  min-width: 0;
+  font-size: 20px;
+  text-align: left;
+  padding: 20px;
+}
