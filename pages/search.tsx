@@ -5,7 +5,7 @@ import { Sitter } from "../types";
 import axios from "axios";
 
 const Search = () => {
-  const SERVER_API = "http://localhost:5000";
+  const SERVER_API = process.env.NEXT_PUBLIC_SERVER_URL;
   const [sitters, setSitters] = React.useState<Sitter[]>([]);
   const [dataSearch, setDataSearch] = React.useState({
     sex: "",
