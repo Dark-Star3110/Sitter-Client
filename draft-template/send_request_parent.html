@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UFT-8">
+        <meta http-equiv="X-UA-Compatibale" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+        <link href="send_request_parent.css" rel="stylesheet">
+        <title>BabySitter</title>
+    </head>
+    <body>
+        <div class="main_web"  style="padding-top : 30px;">
+            <div class="send_request">
+                <div class="logo"><img src="avatar.jpg" alt="BabySitter"></div>
+                <div class="form_request">
+                    <form>
+                        <label for="name_send">名前</label>
+                        <input type="text" id="name_send"  name="name_send" placeholder="名前を書いてください">
+                        <label for="place_send">会いたい場所</label>
+                        <input type="text" id="place_send"  name="place_send" placeholder="会いたい場所を書いてください">
+                        <label for="time">会いたい時間</label>
+                        <div class="time_input" style="display:flex;">                        
+                            <input type="text" id="time_from"  name="time_from" placeholder ="会いたい時間から">
+                            <input type="text" id="time_to"  name="time_to" placeholder ="会いたい時間まで">
+                        </div>
+                        <label for="option_send">赤ちゃんの情報</label>
+                        <textarea id="option_send" name="option_send"  placeholder ="子供の情報を入力してください"></textarea>
+                        <input type="submit" value="送信">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
