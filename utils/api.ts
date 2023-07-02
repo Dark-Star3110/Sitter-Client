@@ -45,6 +45,7 @@ export async function request<T = any>(params: RequestParams<T>): Promise<T> {
     if (isFunction(onError)) {
       onError?.(error);
     }
-    throw error;
+    return false as any;
+    // throw error;
   }
 }

@@ -39,7 +39,7 @@ export const UserContextProvider: FC<Props> = ({ children }) => {
     try {
       const user = await request<Account | null>({
         method: "GET",
-        path: "/api/user",
+        path: "/account/me",
       });
       setUser(user);
     } catch (error) {
