@@ -3,8 +3,10 @@ import styles from "./New.module.css";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Sitter } from "../../../types";
+import { useRouter } from "next/router";
 
 const RequestForm = () => {
+  const router = useRouter();
   const SERVER_API = process.env.NEXT_PUBLIC_SERVER_URL;
   const [sitters, setSitters] = React.useState<Sitter[]>([]);
   const [sitterName, setSitterName] = React.useState<string>("");
@@ -33,6 +35,12 @@ const RequestForm = () => {
     fetchData();
   }, [SERVER_API]);
 
+  React.useEffect(() => {
+    if (router.query.sitter_name) {
+      setSitterName(router.query.sitter_name as string);
+    }
+  }, [router.query.sitter_name]);
+
   const createRequest = async () => {
     const sitterNameExist = sitters.find(
       (sitter) => sitter.sitter_name === sitterName
@@ -46,19 +54,9 @@ const RequestForm = () => {
           sitter_id: sitterNameExist.id,
         });
         if (res.data) {
-          await Swal.fire({
-            title: "成功！",
-            icon: "success",
-            html: `<a href="/request/${res.data.id}/parent" target="_blank"><u>リクエスト情報を表示する</u></a>`,
-          });
-          setRequestData({
-            start_time: "",
-            end_time: "",
-            data: "",
-            state: "wait",
-            parent_id: 5,
-            sitter_id: "",
-          });
+          setTimeout(() => {
+            router.push(`/request/${res.data.id}/parent`);
+          }, 300);
         }
       } catch (err) {
         console.error(err);
@@ -103,7 +101,7 @@ const RequestForm = () => {
               <label htmlFor="time">会いたい時間</label>
               <div className={styles["time_input"]} style={{ display: "flex" }}>
                 <input
-                  type="text"
+                  type="datetime-local"
                   id="time_from"
                   name="time_from"
                   placeholder="会いたい時間から"
@@ -116,7 +114,7 @@ const RequestForm = () => {
                   }}
                 />
                 <input
-                  type="text"
+                  type="datetime-local"
                   id="time_to"
                   name="time_to"
                   placeholder="会いたい時間まで"

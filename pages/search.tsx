@@ -1,8 +1,9 @@
+import Link from "next/link";
 import React, { useCallback } from "react";
-import styles from "../styles/Search.module.css";
 import Footer from "../components/Footer";
+import styles from "../styles/Search.module.css";
 import { Sitter } from "../types";
-import axios from "axios";
+import { request } from "../utils/api";
 
 const Search = () => {
   const SERVER_API = process.env.NEXT_PUBLIC_SERVER_URL;
@@ -20,14 +21,14 @@ const Search = () => {
 
   const fetchData = async () => {
     try {
-      const listSitter = await axios.get(`${SERVER_API}/searchSitter`, {
-        params: dataSearch,
+      const listSitter = await request<Sitter[] | null>({
+        method: "GET",
+        path: "/searchSitter",
+        config: {
+          params: dataSearch,
+        },
       });
-      if (listSitter.data) {
-        setSitters(listSitter.data);
-      } else {
-        setSitters([]);
-      }
+      setSitters(listSitter || []);
     } catch (err) {
       console.error(err);
     }
@@ -40,13 +41,13 @@ const Search = () => {
   const updateRate = useCallback(() => {
     const minStars = starsSelected.map((star) => Number(star[0]));
     const maxStars = starsSelected.map((star) => Number(star[1]));
-    const minRate = Math.min(...minStars);
-    const maxRate = Math.max(...maxStars);
+    const minRate = minStars.length > 0 ? Math.min(...minStars) : -1;
+    const maxRate = maxStars.length > 0 ? Math.max(...maxStars) : -1;
 
     setDataSearch({
       ...dataSearch,
-      minRate: minRate.toString(),
-      maxRate: maxRate.toString(),
+      minRate: minRate !== -1 ? minRate.toString() : "",
+      maxRate: maxRate !== -1 ? maxRate.toString() : "",
     });
   }, [starsSelected]);
   React.useEffect(() => {
@@ -420,14 +421,18 @@ const Search = () => {
             {sitters.length === 0 && <h1>データがありません。</h1>}
             {sitters.map((sitter) => {
               return (
-                <div key={sitter.id} className={styles["sitter-rank"]}>
+                <Link
+                  href={`/request/new?sitter_name=${sitter.sitter_name}`}
+                  key={sitter.id}
+                  className={styles["sitter-rank"]}
+                >
                   <img
                     src={sitter.avatar ?? "assets/avatar.jpg"}
                     alt="hình ảnh"
                   />
                   <div>{sitter.sitter_name}</div>
                   <div>{sitter.rate}⭐</div>
-                </div>
+                </Link>
               );
             })}
           </div>

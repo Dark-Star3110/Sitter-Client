@@ -1,28 +1,26 @@
 import React, { useCallback } from "react";
 import styles from "./RequestParent.module.css";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { ERequestState, Request } from "../../../types";
 import { formatDate } from "../../../utils/date";
+import { request as requestApi } from "../../../utils/api";
 
 const ParentRequest = () => {
-  const SERVER_API = process.env.NEXT_PUBLIC_SERVER_URL;
   const router = useRouter();
   const requestId = router.query.id;
   const [request, setRequest] = React.useState<Request | null>();
 
   const fetchData = useCallback(async () => {
     try {
-      const requestData = await axios.get(`${SERVER_API}/request/${requestId}`);
-      if (requestData.data) {
-        setRequest(requestData.data);
-      } else {
-        setRequest(null);
-      }
+      const requestData = await requestApi<Request | null>({
+        method: "GET",
+        path: `/request/${requestId}`,
+      });
+      setRequest(requestData);
     } catch (err) {
       console.error(err);
     }
-  }, [SERVER_API, requestId]);
+  }, [requestId]);
 
   React.useEffect(() => {
     fetchData();
