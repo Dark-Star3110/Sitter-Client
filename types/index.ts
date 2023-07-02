@@ -44,3 +44,17 @@ export enum ERequestState {
   accepted = "承認",
   rejected = "拒否",
 }
+
+export enum EAccountRole {
+  sitter = "sitter",
+  parent = "parent",
+  admin = "admin",
+}
+
+export type Account = {
+  id: number;
+  user_name: string;
+  role: EAccountRole;
+  created_at: string;
+  updated_at: string;
+};

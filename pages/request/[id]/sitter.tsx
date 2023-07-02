@@ -1,13 +1,12 @@
-import React from "react";
-import styles from "./RequestParent.module.css";
-import axios from "axios";
 import { useRouter } from "next/router";
-import { Request } from "../../../types";
-import { formatDate } from "../../../utils/date";
+import React from "react";
 import Swal from "sweetalert2";
+import { Request } from "../../../types";
+import { request as requestApi } from "../../../utils/api";
+import { formatDate } from "../../../utils/date";
+import styles from "./RequestParent.module.css";
 
 const SitterRequest = () => {
-  const SERVER_API = process.env.NEXT_PUBLIC_SERVER_URL;
   const router = useRouter();
   const requestId = router.query.id;
   const [request, setRequest] = React.useState<Request | null>();
@@ -16,34 +15,36 @@ const SitterRequest = () => {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const requestData = await axios.get(
-          `${SERVER_API}/request/${requestId}`
-        );
-        if (requestData.data) {
-          setRequest(requestData.data);
-          setRequestState(requestData.data.state);
-        } else {
-          setRequest(null);
-        }
+        const requestData = await requestApi<Request | null>({
+          method: "GET",
+          path: `/request/${requestId}`,
+        });
+        setRequest(requestData);
       } catch (err) {
         console.error(err);
       }
     };
     fetchData();
-  }, [SERVER_API, requestId]);
+  }, [requestId]);
 
   const updateRequestState = async () => {
     try {
-      const requestData = await axios.put(
-        `${SERVER_API}/request/${requestId}`,
-        {
+      requestApi<Request | null>({
+        method: "PUT",
+        path: `/request/${requestId}`,
+        data: {
           state: requestState,
-        }
-      );
-      if (requestData.data) {
-        await Swal.fire("成功!", "状態は正常に変更されました!", "success");
-        setRequest({ ...request!, state: requestData.data.state });
-      }
+        },
+        onSuccess: (data) => {
+          if (data) {
+            Swal.fire("成功!", "状態は正常に変更されました!", "success");
+            setRequest({ ...request!, state: data.state });
+          }
+        },
+        onError: (err) => {
+          Swal.fire("エラー！", "エラーがありました。", "error");
+        },
+      });
     } catch (err) {
       console.error(err);
     }

@@ -1,8 +1,9 @@
-import React from "react";
-import styles from "../styles/Search.module.css";
+import Link from "next/link";
+import React, { useCallback } from "react";
 import Footer from "../components/Footer";
+import styles from "../styles/Search.module.css";
 import { Sitter } from "../types";
-import axios from "axios";
+import { request } from "../utils/api";
 
 const Search = () => {
   const SERVER_API = process.env.NEXT_PUBLIC_SERVER_URL;
@@ -16,17 +17,18 @@ const Search = () => {
     certification: "",
     language: "",
   });
+  const [starsSelected, setStarsSelected] = React.useState<string[][]>([]);
 
   const fetchData = async () => {
     try {
-      const listSitter = await axios.get(`${SERVER_API}/searchSitter`, {
-        params: dataSearch,
+      const listSitter = await request<Sitter[] | null>({
+        method: "GET",
+        path: "/searchSitter",
+        config: {
+          params: dataSearch,
+        },
       });
-      if (listSitter.data) {
-        setSitters(listSitter.data);
-      } else {
-        setSitters([]);
-      }
+      setSitters(listSitter || []);
     } catch (err) {
       console.error(err);
     }
@@ -35,6 +37,22 @@ const Search = () => {
   React.useEffect(() => {
     fetchData();
   }, []);
+
+  const updateRate = useCallback(() => {
+    const minStars = starsSelected.map((star) => Number(star[0]));
+    const maxStars = starsSelected.map((star) => Number(star[1]));
+    const minRate = minStars.length > 0 ? Math.min(...minStars) : -1;
+    const maxRate = maxStars.length > 0 ? Math.max(...maxStars) : -1;
+
+    setDataSearch({
+      ...dataSearch,
+      minRate: minRate !== -1 ? minRate.toString() : "",
+      maxRate: maxRate !== -1 ? maxRate.toString() : "",
+    });
+  }, [starsSelected]);
+  React.useEffect(() => {
+    updateRate();
+  }, [starsSelected, updateRate]);
 
   const handleSearch = async () => {
     await fetchData();
@@ -94,6 +112,25 @@ const Search = () => {
     }
   };
 
+  const handleChangeStars = (minStar: string, maxStar: string) => {
+    if (starsSelected.length === 0) {
+      setStarsSelected([[minStar, maxStar]]);
+    } else {
+      const isChecked = starsSelected.some(
+        (star) => star[0] === minStar && star[1] === maxStar
+      );
+      if (isChecked) {
+        setStarsSelected(
+          starsSelected.filter(
+            (star) => star[0] !== minStar && star[1] !== maxStar
+          )
+        );
+      } else {
+        setStarsSelected([...starsSelected, [minStar, maxStar]]);
+      }
+    }
+  };
+
   return (
     <div className={styles["search-layout"]}>
       <header className={styles["header"]}>
@@ -126,39 +163,39 @@ const Search = () => {
                 <div className={styles["checkbox-item"]}>
                   <input
                     type="checkbox"
-                    id="checkbox1"
+                    id="CPR"
                     onChange={handleChangeCertification}
                     value="CPR"
                     checked={dataSearch.certification.includes("CPR")}
                   />
-                  <label htmlFor="checkbox1">CPR</label>
+                  <label htmlFor="CPR">CPR</label>
                 </div>
 
                 <div className={styles["checkbox-item"]}>
                   <input
                     type="checkbox"
-                    id="checkbox2"
+                    id="cert"
                     onChange={handleChangeCertification}
                     value="safe Sitter"
                     checked={dataSearch.certification.includes("safe Sitter")}
                   />
-                  <label htmlFor="checkbox2">safe Sitter</label>
+                  <label htmlFor="cert">safe Sitter</label>
                 </div>
 
                 <div className={styles["checkbox-item"]}>
                   <input
                     type="checkbox"
-                    id="checkbox3"
+                    id="bci"
                     onChange={handleChangeCertification}
                     value="BCI"
                     checked={dataSearch.certification.includes("BCI")}
                   />
-                  <label htmlFor="checkbox3">BCI</label>
+                  <label htmlFor="bci">BCI</label>
                 </div>
 
                 <div className={styles["checkbox-item"]}>
-                  <input type="checkbox" id="checkbox4" />
-                  <label htmlFor="checkbox4">料理</label>
+                  <input type="checkbox" id="food" />
+                  <label htmlFor="food">料理</label>
                 </div>
               </div>
             </div>
@@ -168,114 +205,50 @@ const Search = () => {
 
                 <div className={styles["checkbox-item"]}>
                   <input
-                    id="checkbox1"
-                    type="radio"
-                    checked={
-                      dataSearch.minRate === "4" && dataSearch.maxRate === "5"
-                    }
-                    onClick={() => {
-                      if (
-                        dataSearch.minRate === "4" &&
-                        dataSearch.maxRate === "5"
-                      ) {
-                        setDataSearch({
-                          ...dataSearch,
-                          minRate: "",
-                          maxRate: "",
-                        });
-                      } else
-                        setDataSearch({
-                          ...dataSearch,
-                          minRate: "4",
-                          maxRate: "5",
-                        });
-                    }}
+                    id="4-5-stars"
+                    type="checkbox"
+                    checked={starsSelected.some(
+                      (star) => star[0] === "4" && star[1] === "5"
+                    )}
+                    onClick={() => handleChangeStars("4", "5")}
                   />
-                  <label htmlFor="checkbox1">4-5</label>
+                  <label htmlFor="4-5-stars">4-5</label>
                 </div>
 
                 <div className={styles["checkbox-item"]}>
                   <input
-                    id="checkbox2"
-                    type="radio"
-                    checked={
-                      dataSearch.minRate === "3" && dataSearch.maxRate === "4"
-                    }
-                    onClick={() => {
-                      if (
-                        dataSearch.minRate === "3" &&
-                        dataSearch.maxRate === "4"
-                      ) {
-                        setDataSearch({
-                          ...dataSearch,
-                          minRate: "",
-                          maxRate: "",
-                        });
-                      } else
-                        setDataSearch({
-                          ...dataSearch,
-                          minRate: "3",
-                          maxRate: "4",
-                        });
-                    }}
+                    id="3-4-stars"
+                    type="checkbox"
+                    checked={starsSelected.some(
+                      (star) => star[0] === "3" && star[1] === "4"
+                    )}
+                    onClick={() => handleChangeStars("3", "4")}
                   />
-                  <label htmlFor="checkbox2">3-4</label>
+                  <label htmlFor="3-4-stars">3-4</label>
                 </div>
 
                 <div className={styles["checkbox-item"]}>
                   <input
-                    id="checkbox3"
-                    type="radio"
-                    checked={
-                      dataSearch.minRate === "2" && dataSearch.maxRate === "3"
-                    }
-                    onClick={() => {
-                      if (
-                        dataSearch.minRate === "2" &&
-                        dataSearch.maxRate === "3"
-                      ) {
-                        setDataSearch({
-                          ...dataSearch,
-                          minRate: "",
-                          maxRate: "",
-                        });
-                      } else
-                        setDataSearch({
-                          ...dataSearch,
-                          minRate: "2",
-                          maxRate: "3",
-                        });
-                    }}
+                    id="2-3-stars"
+                    type="checkbox"
+                    checked={starsSelected.some(
+                      (star) => star[0] === "2" && star[1] === "3"
+                    )}
+                    onClick={() => handleChangeStars("2", "3")}
                   />
-                  <label htmlFor="checkbox3">2-3</label>
+                  <label htmlFor="2-3-stars">2-3</label>
                 </div>
 
                 <div className={styles["checkbox-item"]}>
                   <input
-                    id="checkbox4"
-                    type="radio"
-                    checked={
-                      dataSearch.minRate === "1" && dataSearch.maxRate === "2"
-                    }
-                    onClick={() => {
-                      if (
-                        dataSearch.minRate === "1" &&
-                        dataSearch.maxRate === "2"
-                      ) {
-                        setDataSearch({
-                          ...dataSearch,
-                          minRate: "",
-                          maxRate: "",
-                        });
-                      } else
-                        setDataSearch({
-                          ...dataSearch,
-                          minRate: "1",
-                          maxRate: "2",
-                        });
-                    }}
+                    id="1-2-stars"
+                    type="checkbox"
+                    checked={starsSelected.some(
+                      (star) => star[0] === "1" && star[1] === "2"
+                    )}
+                    onClick={() => handleChangeStars("1", "2")}
                   />
-                  <label htmlFor="checkbox4">1-2</label>
+                  <label htmlFor="1-2-stars">1-2</label>
                 </div>
               </div>
             </div>
@@ -331,23 +304,23 @@ const Search = () => {
                 <div className={styles["checkbox-item"]}>
                   <input
                     type="checkbox"
-                    id="checkbox1"
+                    id="us"
                     onChange={handleChangeLanguage}
                     value="English"
                     checked={dataSearch.language.includes("English")}
                   />
-                  <label htmlFor="checkbox1">英語</label>
+                  <label htmlFor="us">英語</label>
                 </div>
 
                 <div className={styles["checkbox-item"]}>
                   <input
                     type="checkbox"
-                    id="checkbox2"
+                    id="jp"
                     onChange={handleChangeLanguage}
                     value="Japanese"
                     checked={dataSearch.language.includes("Japanese")}
                   />
-                  <label htmlFor="checkbox2">日本語</label>
+                  <label htmlFor="jp">日本語</label>
                 </div>
               </div>
             </div>
@@ -357,7 +330,7 @@ const Search = () => {
 
                 <div className={styles["checkbox-item"]}>
                   <input
-                    id="checkbox1"
+                    id="4-exps"
                     type="radio"
                     checked={
                       dataSearch.minYearEx === "4" &&
@@ -381,12 +354,12 @@ const Search = () => {
                         });
                     }}
                   />
-                  <label htmlFor="checkbox1">4+</label>
+                  <label htmlFor="4-exps">4+</label>
                 </div>
 
                 <div className={styles["checkbox-item"]}>
                   <input
-                    id="checkbox2"
+                    id="2-3-exps"
                     type="radio"
                     checked={
                       dataSearch.minYearEx === "2" &&
@@ -410,12 +383,12 @@ const Search = () => {
                         });
                     }}
                   />
-                  <label htmlFor="checkbox2">2-3</label>
+                  <label htmlFor="2-3-exps">2-3</label>
                 </div>
 
                 <div className={styles["checkbox-item"]}>
                   <input
-                    id="checkbox3"
+                    id="0-2-exps"
                     type="radio"
                     checked={
                       dataSearch.minYearEx === "0" &&
@@ -439,7 +412,7 @@ const Search = () => {
                         });
                     }}
                   />
-                  <label htmlFor="checkbox3">2以下</label>
+                  <label htmlFor="0-2-exps">2以下</label>
                 </div>
               </div>
             </div>
@@ -448,14 +421,18 @@ const Search = () => {
             {sitters.length === 0 && <h1>データがありません。</h1>}
             {sitters.map((sitter) => {
               return (
-                <div key={sitter.id} className={styles["sitter-rank"]}>
+                <Link
+                  href={`/request/new?sitter_name=${sitter.sitter_name}`}
+                  key={sitter.id}
+                  className={styles["sitter-rank"]}
+                >
                   <img
                     src={sitter.avatar ?? "assets/avatar.jpg"}
                     alt="hình ảnh"
                   />
                   <div>{sitter.sitter_name}</div>
                   <div>{sitter.rate}⭐</div>
-                </div>
+                </Link>
               );
             })}
           </div>
