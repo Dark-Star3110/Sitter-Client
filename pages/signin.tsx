@@ -31,7 +31,7 @@ const SignIn = () => {
       async onSuccess(data) {
         setIsAuth(true);
         localStorage.setItem("access_token", data.token);
-        router.push("/");
+        router.push("/profile");
       },
     });
     return true;
