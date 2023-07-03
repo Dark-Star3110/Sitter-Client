@@ -1,0 +1,111 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.sitter-profile{
+  display:flex;
+  flex-direction : column;
+  align-items:center;
+  height : 900px;
+  width : 40vw ;
+  border: 2px solid black;
+  margin-top:10px;
+}
+
+.info-error {
+  color: red;
+  font-size: 12px;
+  margin: 0px 0px 0px 5px;
+  text-align: left;
+  width: 80%;
+}
+.sitter-profile-logo {
+  height:80px;
+  padding-top: 30px;
+  text-align: center;
+  line-height: 100%;
+}
+.form_profile{
+  width: 80%;
+  padding-top:10px;
+}
+.form_profile label {
+  display:block;
+  margin:10px 40px 0px 5px ;
+}
+.form_profile input[type="text"], .form_profile input[type="tel"], .form_profile input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom:10px;
+}
+.gender-checkbox {
+  display: flex;
+  align-items: center;
+}
+.upload-avatar {
+  display: inline-flex;
+  align-items: center;
+}
+.upload-avatar__label {
+  padding: 10px 20px;
+  background-color: #ccc;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.language-checkbox {
+  display: flex;
+  align-items: center;
+}
+.language-checkbox input[type="checkbox"]{
+  width: 16px;
+  height: 16px;
+  border: 1px solid black;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.custom-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+.exp-select{
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+.form_profile input[type="submit"] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top:10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  text-decoration: none;
+  text-align: center;
+  color: black;
+  cursor: pointer;
+}
+.form_profile input[type="submit"]:hover {
+  opacity: 0.6;
+}
+.exp-select input[type="submit"]:hover{
+background-color: #f2f2f2;
+color: #2322224b;
+}

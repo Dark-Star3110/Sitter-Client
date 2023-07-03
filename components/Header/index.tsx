@@ -143,11 +143,19 @@ const Header = () => {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">{setting}</Typography>
-                    </MenuItem>
-                  ))}
+                  <MenuItem>
+                    <Link href="/profile">
+                      <Typography textAlign="center">プロファイル</Typography>
+                    </Link>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      localStorage.removeItem("access_token");
+                      window.location.reload();
+                    }}
+                  >
+                    <Typography textAlign="center">ログアウト</Typography>
+                  </MenuItem>
                 </Menu>
               </Box>
             </Toolbar>

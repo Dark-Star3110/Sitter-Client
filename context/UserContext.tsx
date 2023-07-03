@@ -6,17 +6,24 @@ import {
   useMemo,
   useState,
 } from "react";
-import { Account } from "../types";
+import { Account, Parent, Sitter } from "../types";
 import { request } from "../utils/api";
+import { useRouter } from "next/router";
 
 type Props = {
   children: ReactNode;
 };
 
+type AccountWithProfile = Account & {
+  parent?: Parent;
+  sitter?: Sitter;
+};
+
 export type UserContextType = {
   isAuth: boolean;
-  user: Account | null;
-  setUser: (user: Account | null) => void;
+  user: AccountWithProfile | null;
+  setUser: (user: AccountWithProfile | null) => void;
+  setIsAuth: (isAuth: boolean) => void;
   isLoading: boolean;
   error: any;
 };
@@ -25,24 +32,44 @@ export const UserContext = createContext<UserContextType>({
   isAuth: false,
   user: null,
   setUser: () => {},
+  setIsAuth: () => {},
   isLoading: false,
   error: null,
 });
 
 export const UserContextProvider: FC<Props> = ({ children }) => {
-  const [user, setUser] = useState<Account | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
+  const [user, setUser] = useState<AccountWithProfile | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<any>(null);
+  const [isAuth, setIsAuth] = useState<boolean>(false);
 
   const retrieveUser = async () => {
-    setLoading(true);
     try {
-      const user = await request<Account | null>({
+      setLoading(true);
+      const res = await request<{
+        account: Account;
+        parent?: Parent;
+        sitter?: Sitter;
+      } | null>({
         method: "GET",
         path: "/account/me",
       });
-      setUser(user);
+      if (res && !res.parent && !res.sitter) {
+        setUser({ ...res.account });
+        router.push("/profile");
+      } else if (res) {
+        setUser({
+          ...res.account,
+          parent: res.parent,
+          sitter: res.sitter,
+        });
+      } else {
+        setUser(null);
+        localStorage.removeItem("access_token");
+      }
     } catch (error) {
+      setUser(null);
       setError(error);
     } finally {
       setLoading(false);
@@ -51,18 +78,19 @@ export const UserContextProvider: FC<Props> = ({ children }) => {
 
   const value = useMemo(
     () => ({
-      isAuth: !!user,
+      isAuth,
       user,
       setUser,
       isLoading: loading,
       error,
+      setIsAuth,
     }),
-    [user, loading, error]
+    [user, loading, error, isAuth]
   );
 
   useEffect(() => {
     retrieveUser();
-  }, []);
+  }, [isAuth]);
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

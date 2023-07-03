@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 
 const SignIn = () => {
   const router = useRouter();
-  const { user, setUser } = React.useContext(UserContext);
+  const { user, setIsAuth } = React.useContext(UserContext);
   if (user) {
     router.push("/");
   }
@@ -29,7 +29,7 @@ const SignIn = () => {
         await Swal.fire("エラー!", error.response.data.message, "error");
       },
       async onSuccess(data) {
-        setUser(data.account);
+        setIsAuth(true);
         localStorage.setItem("access_token", data.token);
         router.push("/");
       },
