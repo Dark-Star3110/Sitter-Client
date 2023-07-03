@@ -2,38 +2,45 @@ import React from "react";
 import styles from "./New.module.css";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Sitter } from "../../../types";
+import { Parent, Sitter } from "../../../types";
 import { useRouter } from "next/router";
+import { request } from "../../../utils/api";
+import { UserContext } from "../../../context/UserContext";
 
 const RequestForm = () => {
   const router = useRouter();
-  const SERVER_API = process.env.NEXT_PUBLIC_SERVER_URL;
+  const { user, isLoading } = React.useContext(UserContext);
   const [sitters, setSitters] = React.useState<Sitter[]>([]);
   const [sitterName, setSitterName] = React.useState<string>("");
   const [requestData, setRequestData] = React.useState({
     start_time: "",
     end_time: "",
     data: "",
-    state: "wait",
-    parent_id: 5,
     sitter_id: "",
   });
 
   React.useEffect(() => {
+    if (!isLoading && !user) {
+      router.push("/signin");
+    } else if (user?.role !== "parent") {
+      router.push("/");
+    }
+  }, [user, isLoading, router]);
+
+  React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`${SERVER_API}/sitters`);
-        if (res.data) {
-          setSitters(res.data);
-        } else {
-          setSitters([]);
-        }
+        const res = await request<Sitter[] | null>({
+          method: "GET",
+          path: "/sitters",
+        });
+        setSitters(res || []);
       } catch (err) {
         console.error(err);
       }
     };
     fetchData();
-  }, [SERVER_API]);
+  }, []);
 
   React.useEffect(() => {
     if (router.query.sitter_name) {
@@ -49,13 +56,17 @@ const RequestForm = () => {
       await Swal.fire("エラー!", "シッターが見つかりません!", "error");
     } else {
       try {
-        const res = await axios.post(`${SERVER_API}/request/create-request`, {
-          ...requestData,
-          sitter_id: sitterNameExist.id,
+        const res = await request<Parent | null>({
+          method: "POST",
+          path: "/requests/create-request",
+          data: {
+            ...requestData,
+            sitter_id: sitterNameExist.id,
+          },
         });
-        if (res.data) {
+        if (res) {
           setTimeout(() => {
-            router.push(`/request/${res.data.id}/parent`);
+            router.push(`/request/${res.id}`);
           }, 300);
         }
       } catch (err) {

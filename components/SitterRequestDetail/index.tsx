@@ -1,30 +1,54 @@
-import React, { useCallback } from "react";
-import styles from "./RequestParent.module.css";
 import { useRouter } from "next/router";
-import { ERequestState, Request } from "../../../types";
-import { formatDate } from "../../../utils/date";
-import { request as requestApi } from "../../../utils/api";
+import React from "react";
+import Swal from "sweetalert2";
+import { Request } from "../../types";
+import { request as requestApi } from "../../utils/api";
+import { formatDate } from "../../utils/date";
+import styles from "./RequestParent.module.css";
 
-const ParentRequest = () => {
+const SitterRequest = () => {
   const router = useRouter();
   const requestId = router.query.id;
   const [request, setRequest] = React.useState<Request | null>();
+  const [requestState, setRequestState] = React.useState<string>("");
 
-  const fetchData = useCallback(async () => {
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const requestData = await requestApi<Request | null>({
+          method: "GET",
+          path: `/requests/${requestId}`,
+        });
+        setRequest(requestData);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchData();
+  }, [requestId]);
+
+  const updateRequestState = async () => {
     try {
-      const requestData = await requestApi<Request | null>({
-        method: "GET",
-        path: `/request/${requestId}`,
+      requestApi<Request | null>({
+        method: "PUT",
+        path: `/requests/${requestId}`,
+        data: {
+          state: requestState,
+        },
+        onSuccess: (data) => {
+          if (data) {
+            Swal.fire("成功!", "状態は正常に変更されました!", "success");
+            setRequest({ ...request!, state: data.state });
+          }
+        },
+        onError: (err) => {
+          Swal.fire("エラー！", "エラーがありました。", "error");
+        },
       });
-      setRequest(requestData);
     } catch (err) {
       console.error(err);
     }
-  }, [requestId]);
-
-  React.useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  };
 
   if (!request) {
     return <h1>Loading...</h1>;
@@ -36,7 +60,7 @@ const ParentRequest = () => {
       style={{ padding: "40px", display: "flex", justifyContent: "center" }}
     >
       <div className={styles["information_form"]}>
-        <form>
+        <form onSubmit={(e) => e.preventDefault()}>
           <label style={{ padding: "10px 0px" }}>
             要求のID: <span>{request.id}</span>
           </label>
@@ -62,17 +86,33 @@ const ParentRequest = () => {
           <label htmlFor="baby_info">赤ちゃんの情報</label>
           <div className={styles["baby_info"]}>{request.data}</div>
           <label htmlFor="select_id">状況</label>
-          <span className={styles["select_id"]} style={{ padding: "4px 8px" }}>
-            {request.state === "wait"
-              ? ERequestState.wait
-              : request.state === "accepted"
-              ? ERequestState.accepted
-              : ERequestState.rejected}
-          </span>
+          <select
+            className={styles["select_id"]}
+            onChange={(e) => {
+              setRequestState(e.target.value);
+            }}
+          >
+            <option value="wait" selected={requestState === "wait"}>
+              待機中
+            </option>
+            <option value="accepted" selected={requestState === "accepted"}>
+              承認
+            </option>
+            <option value="rejected" selected={requestState === "rejected"}>
+              拒否
+            </option>
+          </select>
+          <button
+            style={{ marginLeft: "20px", cursor: "pointer" }}
+            onClick={updateRequestState}
+            type="button"
+          >
+            更新
+          </button>
         </form>
       </div>
     </div>
   );
 };
 
-export default ParentRequest;
+export default SitterRequest;
