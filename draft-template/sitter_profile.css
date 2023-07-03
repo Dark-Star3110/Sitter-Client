@@ -1,0 +1,124 @@
+body{
+    display:flex;
+    justify-content: center;
+}
+.sitter-profile{
+    display:flex;
+    flex-direction : column;
+    align-items:center;
+    height : 900px;
+    width : 40vw ;
+    border: 2px solid black;
+    margin-top:10px;
+}
+.sitter-profile-logo > img{
+    height:80px;
+    width :160px;
+    padding-top: 10px;
+    margin : 10px
+}
+.form_profile{
+    width: 80%;
+    padding-top:20px;
+}
+.form_profile label {
+    display:block;
+    margin:10px 40px 0px 5px ;
+}
+.form_profile input[type="text"]{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom:10px;
+}
+.gender-checkbox {
+    display: flex;
+    align-items: center;
+}
+input[type="radio"]{
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #000;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+}
+input[type="radio"]:checked::before {
+    content: '\2713';
+    font-size: 16px;
+    line-height: 14px;
+    color: #fff;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+}
+input[type="radio"]:focus {
+    background-color: blue;
+}
+.upload-avatar {
+    display: inline-flex;
+    align-items: center;
+}
+.upload-avatar__label {
+    padding: 10px 20px;
+    background-color: #ccc;
+    color: #333;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.language-checkbox {
+    display: flex;
+    align-items: center;
+}
+input[type="checkbox"]{
+    width: 16px;
+    height: 16px;
+    border: 1px solid black;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.custom-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+.exp-select{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+input[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top:10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    text-decoration: none;
+    text-align: center;
+    color: black;
+}
+input[type="submit"]:hover{
+  background-color: #f2f2f2;
+  color: #2322224b;
+}
+
+
+
+
+
+
+

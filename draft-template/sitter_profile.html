@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UFT-8">
+        <meta http-equiv="X-UA-Compatibale" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="sitter_profile.css" rel="stylesheet">
+        <title>BabySitter</title>
+    </head>
+    <body>
+            <div class="sitter-profile">
+                <div class="sitter-profile-logo"><img src="#" alt="BabySitter"></div>
+                <div class="form_profile">
+                    <form>
+                        <label>名前</label>
+                        <input type="text" name="profile_name" placeholder="名を書いてください">
+                        <label>電話番号</label>
+                        <input type="text" name="phonenumber" placeholder="電話番号を書いてください">
+                        <label>ジェンダー</label>
+                        <div class="gender-checkbox">      
+                            <label><input type="radio" name="sex">男性</label>                            
+                            <label><input type="radio" name="sex">女性</label>
+                        </div>
+                        <div class="upload-avatar">
+                            <label>アバター</label>
+                            <label for="avatar-upload" class="upload-avatar__label">アップロード</label>
+                            <input type="file" id="avatar-upload" style="display: none;">
+                        </div>
+                        <label>言語</label>
+                        <div class="language-checkbox"> 
+                            <label for="english"><input type="checkbox" id="english">英語</label>      
+                            <label for="vietnamese"><input type="checkbox" id="vietnamese">ベトナム語</label>                     
+                            <label for="japanese"><input type="checkbox" id="japanese">日本語</label>
+                        </div>
+                        <label for="skill">スキル</label>
+                        <input type="text" name="skill" placeholder="スキルを書いてください">
+                        <label for="pay">時給</label>
+                        <input type="text" name="pay">
+                        <label>認証</label>
+                        <select class="custom-select">
+                            <option value="option1"></option>
+                            <option value="option2">Lựa chọn 2</option>
+                            <option value="option3">Lựa chọn 3</option>
+                        </select>
+                        <label for="experience">経験年数</label>
+                        <select class="exp-select">
+                            <option value="op1"></option>
+                            <option value="op2">Lựa chọn 2</option>
+                            <option value="op3">Lựa chọn 3</option>
+                        </select>
+                        <input type="submit" value="APPLY">
+                    </form>
+                </div>
+            </div>
+    </body>
+</html>
