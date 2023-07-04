@@ -19,19 +19,23 @@ const SignUp = () => {
       return;
     }
 
-    await request({
-      method: "POST",
-      path: `/account/signUp`,
-      data: userData,
-      async onError(error) {
-        console.error(error);
-        await Swal.fire("エラー!", error.response.data.message, "error");
-      },
-      async onSuccess(data) {
-        await Swal.fire("成功!", "サインアップに成功しました!", "success");
-        router.push("/signin");
-      },
-    });
+    try {
+      await request({
+        method: "POST",
+        path: `/account/signUp`,
+        data: userData,
+        async onError(error) {
+          console.error(error);
+          await Swal.fire("エラー!", error.response.data.message, "error");
+        },
+        async onSuccess(data) {
+          await Swal.fire("成功!", "サインアップに成功しました!", "success");
+          router.push("/signin");
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div style={{ paddingTop: 30, display: "flex", justifyContent: "center" }}>

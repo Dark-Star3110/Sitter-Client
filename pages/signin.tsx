@@ -20,20 +20,24 @@ const SignIn = () => {
   const signIn: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
-    await request({
-      method: "POST",
-      path: `/account/signIn`,
-      data: userSignIn,
-      async onError(error) {
-        console.error(error);
-        await Swal.fire("エラー!", error.response.data.message, "error");
-      },
-      async onSuccess(data) {
-        setIsAuth(true);
-        localStorage.setItem("access_token", data.token);
-        router.push("/");
-      },
-    });
+    try {
+      await request({
+        method: "POST",
+        path: `/account/signIn`,
+        data: userSignIn,
+        async onError(error) {
+          console.error(error);
+          await Swal.fire("エラー!", error.response.data.message, "error");
+        },
+        async onSuccess(data) {
+          setIsAuth(true);
+          localStorage.setItem("access_token", data.token);
+          router.push("/");
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
     return true;
   };
 

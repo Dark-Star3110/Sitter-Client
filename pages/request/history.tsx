@@ -5,6 +5,7 @@ import React from "react";
 import { request } from "../../utils/api";
 import Swal from "sweetalert2";
 import { formatDate } from "../../utils/date";
+import Link from "next/link";
 
 type Response = {
   id: number;
@@ -68,7 +69,9 @@ const RequestHistory = () => {
             </tr>
             {requests.map((request) => (
               <tr key={request.id}>
-                <td>{request.id}</td>
+                <td>
+                  <Link href={"/request/" + request.id}>{request.id}</Link>
+                </td>
                 <td>
                   {user?.role === "sitter"
                     ? request.parent?.parent_name
