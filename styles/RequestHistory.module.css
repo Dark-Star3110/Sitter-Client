@@ -1,0 +1,31 @@
+.history-body{
+  display:flex;
+  flex-direction: column;
+}
+.body-request-history{
+  display:flex;
+  flex-direction:column;
+  border: 2px solid black;
+  margin: 0 100px;
+}
+.history-property{
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.history-items {
+  border-bottom: 2px solid black;
+  height:40px;
+  margin:10px;
+}
+.history-property th, .history-property td {
+  text-align: center;
+  font-size:20px;
+  height:60px;
+}
+.history-items select{
+  width:80px;
+  height:35px;
+  border: 2px solid black;
+  border-radius: 4px;
+  box-sizing: border-box;
+}

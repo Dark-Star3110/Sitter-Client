@@ -148,6 +148,11 @@ const Header = () => {
                       <Typography textAlign="center">プロファイル</Typography>
                     </Link>
                   </MenuItem>
+                  <MenuItem>
+                    <Link href="/request/history">
+                      <Typography textAlign="center">リクエスト履歴</Typography>
+                    </Link>
+                  </MenuItem>
                   <MenuItem
                     onClick={() => {
                       localStorage.removeItem("access_token");
