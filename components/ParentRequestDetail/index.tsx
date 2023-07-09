@@ -41,7 +41,7 @@ const ParentRequest = () => {
             要求のID: <span>{request.id}</span>
           </label>
           <label htmlFor="name_info">会う場所</label>
-          <div id="name_info">{request.parent.address}</div>
+          <div id="name_info">{request.address || request.parent.address}</div>
           <label htmlFor="name">会う時間</label>
           <span className={styles["time_meeting"]} style={{ display: "flex" }}>
             <div id="time_info_from">{formatDate(request.start_time)}</div>
