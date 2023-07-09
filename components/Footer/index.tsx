@@ -66,7 +66,7 @@ const Footer = () => {
                 paddingTop: "12px",
               }}
             >
-              0123456789
+              0969696969
             </div>
             <div
               style={{
@@ -76,7 +76,7 @@ const Footer = () => {
                 paddingTop: "12px",
               }}
             >
-              doquangphuc@gmail.com
+              tranbinhminh1403@gmail.com
             </div>
           </div>
         </div>
