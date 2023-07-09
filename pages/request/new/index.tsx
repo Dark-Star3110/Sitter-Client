@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./New.module.css";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { Parent, Sitter } from "../../../types";
 import { useRouter } from "next/router";
@@ -17,12 +16,13 @@ const RequestForm = () => {
     end_time: "",
     data: "",
     sitter_id: "",
+    address: user?.parent?.address || "",
   });
 
   React.useEffect(() => {
     if (!isLoading && !user) {
       router.push("/signin");
-    } else if (user?.role !== "parent") {
+    } else if (!isLoading && user?.role !== "parent") {
       router.push("/");
     }
   }, [user, isLoading, router]);
@@ -48,12 +48,38 @@ const RequestForm = () => {
     }
   }, [router.query.sitter_name]);
 
-  const createRequest = async () => {
+  function validateData(): string | true {
     const sitterNameExist = sitters.find(
       (sitter) => sitter.sitter_name === sitterName
     );
     if (!sitterNameExist) {
-      await Swal.fire("エラー!", "シッターが見つかりません!", "error");
+      return "シッターが見つかりません!";
+    }
+    if (!requestData.start_time) {
+      return "会いたい時間を入力してください";
+    }
+    if (!requestData.end_time) {
+      return "会いたい時間を入力してください";
+    }
+
+    if (
+      Date.now() > new Date(requestData.start_time).getTime() ||
+      new Date(requestData.start_time).getTime() >
+        new Date(requestData.end_time).getTime()
+    ) {
+      return "会いたい時間が不正です";
+    }
+
+    return true;
+  }
+
+  const createRequest = async () => {
+    const sitterNameExist = sitters.find(
+      (sitter) => sitter.sitter_name === sitterName
+    );
+    const validate = validateData();
+    if (validate !== true) {
+      await Swal.fire("エラー!", validate, "error");
     } else {
       try {
         const res = await request<Parent | null>({
@@ -61,7 +87,7 @@ const RequestForm = () => {
           path: "/requests/create-request",
           data: {
             ...requestData,
-            sitter_id: sitterNameExist.id,
+            sitter_id: sitterNameExist?.id,
           },
         });
         if (res) {
@@ -108,6 +134,10 @@ const RequestForm = () => {
                 id="place_send"
                 name="place_send"
                 placeholder="会いたい場所を書いてください"
+                value={requestData.address}
+                onChange={(e) => {
+                  setRequestData({ ...requestData, address: e.target.value });
+                }}
               />
               <label htmlFor="time">会いたい時間</label>
               <div className={styles["time_input"]} style={{ display: "flex" }}>

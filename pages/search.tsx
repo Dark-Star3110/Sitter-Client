@@ -18,6 +18,7 @@ const Search = () => {
     language: "",
   });
   const [starsSelected, setStarsSelected] = React.useState<string[][]>([]);
+  const [sort, setSort] = React.useState("");
 
   const fetchData = async () => {
     try {
@@ -31,6 +32,23 @@ const Search = () => {
       setSitters(listSitter || []);
     } catch (err) {
       console.error(err);
+    }
+  };
+  const updateSitters = (sort: string) => {
+    if (sort === "name") {
+      setSitters((prev) =>
+        prev.sort((a, b) => a.sitter_name.localeCompare(b.sitter_name))
+      );
+    } else if (sort === "rating") {
+      setSitters((prev) =>
+        prev.sort((a, b) => {
+          const rateA = a.rate ? a.rate : 0;
+          const rateB = b.rate ? b.rate : 0;
+          return rateB > rateA ? 1 : -1;
+        })
+      );
+    } else {
+      setSitters((prev) => prev.sort((a, b) => a.id - b.id));
     }
   };
 
@@ -145,11 +163,17 @@ const Search = () => {
           </div>
           <div className={styles["header-right"]}>
             <span className={styles["highlighted-text"]}>並び替え</span>
-            <select id="mySelect">
-              <option value="option1"></option>
-              <option value="option2">Option 1</option>
-              <option value="option3">Option 2</option>
-              <option value="option4">Option 3</option>
+            <select
+              id="mySelect"
+              value={sort}
+              onChange={(e) => {
+                setSort(e.target.value);
+                updateSitters(e.target.value);
+              }}
+            >
+              <option value=""></option>
+              <option value="name">名前</option>
+              <option value="rating">レーティング</option>
             </select>
           </div>
         </nav>

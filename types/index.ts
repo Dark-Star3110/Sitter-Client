@@ -36,6 +36,7 @@ export type Request = {
   feedback_id: number | null;
   sitter: Sitter;
   parent: Parent;
+  address?: string;
 };
 
 export enum ERequestState {

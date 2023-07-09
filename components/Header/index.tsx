@@ -15,8 +15,6 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import Home from "@mui/icons-material/Home";
 
-const settings = ["プロファイル", "ログアウト"];
-
 const Header = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
@@ -39,7 +37,7 @@ const Header = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const { user } = React.useContext(UserContext);
+  const { user, setUser } = React.useContext(UserContext);
   return (
     <>
       {user ? (
@@ -50,7 +48,7 @@ const Header = () => {
               <Typography
                 variant="h6"
                 noWrap
-                component="a"
+                component={Link}
                 href="/"
                 sx={{
                   mr: 2,
@@ -156,6 +154,7 @@ const Header = () => {
                   <MenuItem
                     onClick={() => {
                       localStorage.removeItem("access_token");
+                      setUser(null);
                       window.location.reload();
                     }}
                   >
