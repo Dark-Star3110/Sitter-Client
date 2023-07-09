@@ -60,32 +60,30 @@ const SitterProfile: FC<Props> = ({ sitter }) => {
     <div className={styles["container"]}>
       <div className={styles["sitter-profile"]}>
         <div className={styles["sitter-profile-logo"]}>
-          シッターのプロファイ―ル
+          Sitter&rsquo;s profile
         </div>
         {error && <div className={styles["info-error"]}>{error}</div>}
         <div className={styles["form_profile"]}>
           <form onSubmit={(e) => e.preventDefault()}>
-            <label>名前*</label>
+            <label>Name</label>
             <input
               type="text"
               name="profile_name"
-              placeholder="名を書いてください"
               value={sitterInfo.sitter_name}
               onChange={(e) =>
                 setSitterInfo({ ...sitterInfo, sitter_name: e.target.value })
               }
             />
-            <label>電話番号*</label>
+            <label>Phone number</label>
             <input
               type="tel"
               name="phonenumber"
-              placeholder="電話番号を書いてください"
               value={sitterInfo.phone}
               onChange={(e) =>
                 setSitterInfo({ ...sitterInfo, phone: e.target.value })
               }
             />
-            <label>ジェンダー</label>
+            <label>Address</label>
             <div className={styles["gender-checkbox"]}>
               <label>
                 <input
@@ -99,7 +97,7 @@ const SitterProfile: FC<Props> = ({ sitter }) => {
                     })
                   }
                 />
-                男性
+                Male
               </label>
               <label>
                 <input
@@ -113,16 +111,16 @@ const SitterProfile: FC<Props> = ({ sitter }) => {
                     })
                   }
                 />
-                女性
+                Female
               </label>
             </div>
             <div className={styles["upload-avatar"]}>
-              <label>アバター</label>
+              <label>Avatar</label>
               <label
                 htmlFor="avatar-upload"
                 className={styles["upload-avatar__label"]}
               >
-                アップロード
+                Upload file
               </label>
               <input
                 type="file"
@@ -130,7 +128,7 @@ const SitterProfile: FC<Props> = ({ sitter }) => {
                 style={{ display: "none" }}
               />
             </div>
-            <label>言語</label>
+            <label>Language</label>
             <div className={styles["language-checkbox"]}>
               <label htmlFor="english">
                 <input
@@ -153,7 +151,7 @@ const SitterProfile: FC<Props> = ({ sitter }) => {
                     })
                   }
                 />
-                英語
+                English
               </label>
               <label htmlFor="vietnamese">
                 <input
@@ -178,7 +176,7 @@ const SitterProfile: FC<Props> = ({ sitter }) => {
                     })
                   }
                 />
-                ベトナム語
+                Vietnamese
               </label>
               <label htmlFor="japanese">
                 <input
@@ -203,20 +201,20 @@ const SitterProfile: FC<Props> = ({ sitter }) => {
                     })
                   }
                 />
-                日本語
+                Japanese
               </label>
             </div>
-            <label htmlFor="skill">スキル</label>
+            <label htmlFor="skill">I&rsquo;m skilled at</label>
             <input
               type="text"
               name="skill"
-              placeholder="スキルを書いてください"
+              placeholder="skill"
               value={sitterInfo.food}
               onChange={(e) =>
                 setSitterInfo({ ...sitterInfo, food: e.target.value })
               }
             />
-            <label htmlFor="pay">時給</label>
+            <label htmlFor="pay">Hourly pay</label>
             <input
               type="number"
               name="pay"
@@ -228,7 +226,7 @@ const SitterProfile: FC<Props> = ({ sitter }) => {
                 })
               }
             />
-            <label>認証</label>
+            <label>Certification</label>
             <select
               className={styles["custom-select"]}
               value={sitterInfo.certification}
@@ -236,12 +234,12 @@ const SitterProfile: FC<Props> = ({ sitter }) => {
                 setSitterInfo({ ...sitterInfo, certification: e.target.value })
               }
             >
-              <option value="">なし</option>
+              <option value="">No</option>
               <option value="BCI">BCI</option>
               <option value="CPR">CPR</option>
               <option value="Safe Sitter">Safe Sitter</option>
             </select>
-            <label htmlFor="experience">経験年数</label>
+            <label htmlFor="experience">Years of experience</label>
             <select
               className={styles["exp-select"]}
               value={sitterInfo.year_ex}
@@ -252,14 +250,14 @@ const SitterProfile: FC<Props> = ({ sitter }) => {
                 })
               }
             >
-              <option value="0">１年以下</option>
-              <option value="1">１年</option>
-              <option value="2">２年</option>
-              <option value="3">３年</option>
-              <option value="4">４年</option>
-              <option value="5">4年以上</option>
+              <option value="0">0 year</option>
+              <option value="1">1 year</option>
+              <option value="2">2 years</option>
+              <option value="3">3 years</option>
+              <option value="4">4 years</option>
+              <option value="5">4 years ⬆️</option>
             </select>
-            <input type="submit" value="送信" onClick={handleSubmit} />
+            <input type="submit" value="APPLY" onClick={handleSubmit} />
           </form>
         </div>
       </div>
