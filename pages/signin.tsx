@@ -80,9 +80,6 @@ const SignIn = () => {
             <button type="submit" className={styles["login_button"]}>
               ログイン
             </button>
-            <button className={styles["login_button"]}>
-              Facebookでログイン
-            </button>
             <Link href="/signup" className={styles["signup_text"]}>
               メンバーではありませんか? 保護者または保母として登録する
             </Link>
