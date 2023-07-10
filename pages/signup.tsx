@@ -26,7 +26,11 @@ const SignUp = () => {
         data: userData,
         async onError(error) {
           console.error(error);
-          await Swal.fire("エラー!", error.response.data.message, "error");
+          await Swal.fire(
+            "エラー!",
+            error.response?.data?.message || "何かエラーが発生しました",
+            "error"
+          );
         },
         async onSuccess(data) {
           await Swal.fire("成功!", "サインアップに成功しました!", "success");

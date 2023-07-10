@@ -63,7 +63,8 @@
   cursor: pointer;
 }
 .login_button:hover {
-  opacity: 0.5;
+  background-color: #15a2fa;
+  color: white;
 }
 .signup_text {
   display: block;

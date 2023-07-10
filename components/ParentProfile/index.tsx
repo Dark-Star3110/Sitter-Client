@@ -1,13 +1,17 @@
 import React, { FC } from "react";
 import styles from "./ParentProfile.module.css";
-import { Parent, Sitter } from "../../types";
+import { Parent } from "../../types";
 import { request } from "../../utils/api";
 import { UserContext } from "../../context/UserContext";
 import { useRouter } from "next/router";
+import { uploadFile } from "../../utils/uploadFile";
 
 type Props = {
   parent?: Parent;
 };
+
+const IMAGE_PATH =
+  "https://qrxfodpyxhchwlkojpkv.supabase.co/storage/v1/object/public/avatar/";
 
 const ParentProfile: FC<Props> = ({ parent }) => {
   const router = useRouter();
@@ -24,6 +28,7 @@ const ParentProfile: FC<Props> = ({ parent }) => {
         address: "",
       } as Parent)
   );
+  const [avatar, setAvatar] = React.useState<File | null>(null);
 
   const handleSubmit = async () => {
     if (!parentInfo.parent_name || !parentInfo.phone || !parentInfo.address) {
@@ -36,10 +41,13 @@ const ParentProfile: FC<Props> = ({ parent }) => {
       return;
     }
     try {
+      let path = "";
+      if (avatar)
+        path = await uploadFile(`${Date.now()}-${avatar.name}`, avatar);
       const res = await request<Parent>({
         method: "POST",
         path: "/account/parent/update",
-        data: parentInfo,
+        data: { ...parentInfo, ...(path ? { avatar: IMAGE_PATH + path } : {}) },
       });
       user && setUser({ ...user, parent: res });
       setError("");
@@ -93,6 +101,7 @@ const ParentProfile: FC<Props> = ({ parent }) => {
             name="image-file"
             id="avatar-img"
             style={{ display: "none" }}
+            onChange={(e) => setAvatar(e.target.files?.[0] || null)}
           />
         </div>
         <label>緊急連絡先の電話番号</label>

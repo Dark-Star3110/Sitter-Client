@@ -45,22 +45,15 @@ const SitterProfile: FC<Props> = ({ sitter }) => {
       setError("名前と電話番号は必須です");
       return;
     }
-    if (!avatar) {
-      window.scroll({
-        top: 0,
-        left: 0,
-        behavior: "smooth",
-      });
-      setError("プロフィール写真を選択してください");
-      return;
-    }
     try {
       // pass Blob of avatar to uploadFile function
-      const path = await uploadFile(`${Date.now()}-${avatar.name}`, avatar);
+      let path = "";
+      if (avatar)
+        path = await uploadFile(`${Date.now()}-${avatar.name}`, avatar);
       const res = await request<Sitter>({
         method: "POST",
         path: "/account/sitter/update",
-        data: { ...sitterInfo, avatar: IMAGE_PATH + path },
+        data: { ...sitterInfo, ...(path ? { avatar: IMAGE_PATH + path } : {}) },
       });
       user && setUser({ ...user, sitter: res });
       setError("");
