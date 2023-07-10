@@ -7,12 +7,18 @@ const Main = () => {
     <main>
       <div className={style["Main-website"]}>
         <div className={style["button-container"]}>
-          <Link className={style["custom-button1"]} href="/search">
-            ベビーシッターを探す
-          </Link>
-          <a className={style["custom-button2"]} href="#">
-            私はベビーシッター
-          </a>
+          <div
+            className={style["Background-main-1"]}
+            style={{ backgroundImage: `url(assets/avatar.jpg)` }}
+          ></div>
+          <div className={style["action"]}>
+            <Link className={style["custom-button1"]} href="/search">
+              ベビーシッターを探す
+            </Link>
+            <a className={style["custom-button2"]} href="#">
+              私はベビーシッター
+            </a>
+          </div>
         </div>
 
         <div

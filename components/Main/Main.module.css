@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin-bottom: 20px;
+
 }
 .Background-main {
   background-size: cover;
@@ -11,10 +12,25 @@
   height: 70vh;
 }
 
+.Background-main-1 {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 70%;
+  height: 50vh;
+}
+
+.action {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+}
+
 .button-container {
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .custom-button1 {
