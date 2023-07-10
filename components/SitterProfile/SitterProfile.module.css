@@ -103,7 +103,8 @@
   cursor: pointer;
 }
 .form_profile input[type="submit"]:hover {
-  opacity: 0.6;
+  background-color: #15a2fa;
+  color: white;
 }
 .exp-select input[type="submit"]:hover{
 background-color: #f2f2f2;

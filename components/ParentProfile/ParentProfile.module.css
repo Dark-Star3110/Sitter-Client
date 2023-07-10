@@ -73,6 +73,6 @@
   cursor: pointer;
 }
 .info-form input[type="submit"]:hover{
-  background-color: #f2f2f2;
-  color: #2322224b;
+  background-color: #15a2fa;
+  color: white;
 }
